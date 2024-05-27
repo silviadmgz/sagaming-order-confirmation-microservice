@@ -8,11 +8,16 @@ builder.Configuration.AddUserSecrets<Program>();
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 builder.Services.AddTransient<EmailService>();
 
-// Add logging
-builder.Logging.ClearProviders();
-builder.Logging.AddConsole();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 app.MapPost("/send-email", async (EmailRequest request, EmailService emailService) =>
 {
