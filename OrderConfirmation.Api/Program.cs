@@ -21,8 +21,15 @@ if (app.Environment.IsDevelopment())
 
 app.MapPost("/send-email", async (EmailRequest request, EmailService emailService) =>
 {
-    await emailService.SendEmailAsync(request.ToEmail, request.Subject, request.Message);
-    return Results.Ok("Email sent successfully.");
+    try
+    {
+        await emailService.SendEmailAsync(request.ToEmail, request.Subject, request.Message);
+        return Results.Ok("Email sent successfully.");
+    }
+    catch (Exception e)
+    {
+        return Results.BadRequest(e);
+    }
 });
 
 app.Run();
